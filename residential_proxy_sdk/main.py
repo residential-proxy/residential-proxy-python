@@ -10,6 +10,30 @@ class ProxySDK:
         self.session = requests.Session()
         self.session.headers.update(self.headers)
 
+    def login(self, username: str, password: str):
+        data = {'username': username, 'password': password}
+        response = self.session.post(f'{self.base_url}/api/client/login', json=data)
+        response.raise_for_status()
+        return response.json()
+    
+    def register(self, username: str, email: str, password: str):
+        data = {'username': username, 'email': email, 'password': password}
+        response = self.session.post(f'{self.base_url}/api/client/register', json=data)
+        response.raise_for_status()
+        return response.json()
+    
+    def forgot_password(self, email: str):
+        data = {'email': email}
+        response = self.session.post(f'{self.base_url}/api/client/forgot-password', json=data)
+        response.raise_for_status()
+        return response.json()
+    
+    def reset_password(self, token: str, new_password: str):
+        data = {'token': token, 'new_password': new_password}
+        response = self.session.post(f'{self.base_url}/api/client/reset-password', json=data)
+        response.raise_for_status()
+        return response.json()
+
     def get_provinces(self, search_text: str = None):
         params = {}
         if search_text:
